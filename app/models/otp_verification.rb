@@ -7,7 +7,7 @@ class OtpVerification
 
   def send_token
     @one_time_password.now.tap do |token|
-      Rails.cache.write("otp_verification_token", token)
+      Rails.cache.write(cache_key, token)
       @sms_client.send_sms(
         recipient: @user.phone_number,
         message: "Your OTP is #{token}"
@@ -16,6 +16,12 @@ class OtpVerification
   end
 
   def verify_token(token)
-    token == Rails.cache.read("otp_verification_token")
+    token == Rails.cache.read(cache_key)
+  end
+
+  private
+
+  def cache_key
+    "otp_verification_token_#{@user.id}"
   end
 end

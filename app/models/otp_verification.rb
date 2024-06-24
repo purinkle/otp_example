@@ -1,8 +1,13 @@
 class OtpVerification
-  VALID_TOKEN = "123456"
+  def initialize
+    @one_time_password = OneTimePassword.build
+  end
 
   def send_token
-    Rails.cache.write("otp_verification_token", VALID_TOKEN)
+    @one_time_password.now.tap do |token|
+      Rails.cache.write("otp_verification_token", token)
+      Rails.logger.info("#{"*" * 10} [token] #{token.inspect}")
+    end
   end
 
   def verify_token(token)

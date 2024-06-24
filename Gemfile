@@ -50,6 +50,7 @@ gem "cssbundling-rails"
 gem "sidekiq"
 
 gem "clearance"
+gem "rotp"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

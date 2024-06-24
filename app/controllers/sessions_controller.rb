@@ -3,6 +3,9 @@ class SessionsController < Clearance::SessionsController
     @user = authenticate(params)
 
     if @user.present?
+      @otp_verification = OtpVerification.new
+      @otp_verification.send_token
+
       render "otp_verifications/new"
     else
       flash.now.alert = "Bad email or password."

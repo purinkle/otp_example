@@ -4,7 +4,7 @@ require "support/features/clearance_helpers"
 RSpec.feature "User signs out" do
   scenario "signs out" do
     sign_in
-    verify_with "123456"
+    verify_with OtpVerification::VALID_TOKEN
     sign_out
 
     expect_user_to_be_signed_out

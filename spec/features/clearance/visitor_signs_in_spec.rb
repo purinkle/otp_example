@@ -5,7 +5,7 @@ RSpec.feature "Visitor signs in" do
   scenario "with valid email and password" do
     create_user "user@example.com", "password"
     sign_in_with "user@example.com", "password"
-    verify_with "123456"
+    verify_with OtpVerification::VALID_TOKEN
 
     expect_user_to_be_signed_in
   end
@@ -13,7 +13,7 @@ RSpec.feature "Visitor signs in" do
   scenario "with valid mixed-case email and password " do
     create_user "user.name@example.com", "password"
     sign_in_with "User.Name@example.com", "password"
-    verify_with "123456"
+    verify_with OtpVerification::VALID_TOKEN
 
     expect_user_to_be_signed_in
   end
@@ -33,6 +33,15 @@ RSpec.feature "Visitor signs in" do
     expect_user_to_be_signed_out
   end
 
+  scenario "tries with an invalid one-time password" do
+    create_user "user@example.com", "password"
+    sign_in_with "user@example.com", "password"
+    verify_with "INVALID_TOKEN"
+
+    expect_page_to_display_otp_error
+    expect_user_to_be_signed_out
+  end
+
   private
 
   def create_user(email, password)
@@ -43,5 +52,9 @@ RSpec.feature "Visitor signs in" do
     expect(page.body).to include(
       I18n.t("flashes.failure_after_create", sign_up_path: sign_up_path),
     )
+  end
+
+  def expect_page_to_display_otp_error
+    expect(page.body).to include("Bad one-time password")
   end
 end

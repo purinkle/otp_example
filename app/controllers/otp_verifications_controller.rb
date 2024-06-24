@@ -1,7 +1,7 @@
 class OtpVerificationsController < ApplicationController
   def create
     @user = User.find_by(email: params[:email])
-    @otp_verification = OtpVerification.new
+    @otp_verification = OtpVerification.new(@user)
 
     if @otp_verification.verify_token(params[:token])
       sign_in @user

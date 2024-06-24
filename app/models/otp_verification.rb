@@ -1,12 +1,17 @@
 class OtpVerification
-  def initialize
+  def initialize(user)
+    @user = user
     @one_time_password = OneTimePassword.build
+    @sms_client = SmsClient.build
   end
 
   def send_token
     @one_time_password.now.tap do |token|
       Rails.cache.write("otp_verification_token", token)
-      Rails.logger.info("#{"*" * 10} [token] #{token.inspect}")
+      @sms_client.send_sms(
+        recipient: @user.phone_number,
+        message: "Your OTP is #{token}"
+      )
     end
   end
 

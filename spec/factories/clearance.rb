@@ -6,5 +6,6 @@ FactoryBot.define do
   factory :user do
     email
     password { "password" }
+    phone_number { "+966512345678" }
   end
 end

@@ -42,6 +42,18 @@ RSpec.feature "Visitor signs in" do
     expect_user_to_be_signed_out
   end
 
+  scenario "takes too long to enter one-time password" do
+    freeze_time do
+      create_user "user@example.com", "password"
+      sign_in_with "user@example.com", "password"
+      travel_to OtpVerification::TOKEN_EXPIRATION.from_now + 1.second
+      verify_with FakeOneTimePassword::TOKEN
+
+      expect_page_to_display_otp_error
+      expect_user_to_be_signed_out
+    end
+  end
+
   private
 
   def create_user(email, password)

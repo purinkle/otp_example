@@ -1,4 +1,6 @@
 class OtpVerification
+  TOKEN_EXPIRATION = 5.minutes
+
   def initialize(user)
     @user = user
     @one_time_password = OneTimePassword.build
@@ -7,7 +9,7 @@ class OtpVerification
 
   def send_token
     @one_time_password.now.tap do |token|
-      Rails.cache.write(cache_key, token)
+      Rails.cache.write(cache_key, token, expires_in: TOKEN_EXPIRATION)
       @sms_client.send_sms(
         recipient: @user.phone_number,
         message: "Your OTP is #{token}"

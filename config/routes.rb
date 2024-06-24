@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", :as => :rails_health_check
 
   resources :fake_sms_messages, only: :index, unless: -> { Rails.env.production? }
+  resource :otp_token, only: :create
   resource :otp_verification, only: :create
 
   # Defines the root path route ("/")

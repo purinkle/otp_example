@@ -11,3 +11,5 @@
     <%= form.submit "Verify" %>
   </div>
 <% end %>
+
+<%= button_to "Resend OTP", otp_token_path, method: :post, params: {email: @user.email}, data: {turbo: false} %>

@@ -18,6 +18,15 @@ RSpec.feature "Visitor signs in" do
     expect_user_to_be_signed_in
   end
 
+  scenario "requests a new one-time password" do
+    create_user "user@example.com", "password"
+    sign_in_with "user@example.com", "password"
+    click_button "Resend OTP"
+    verify_with FakeOneTimePassword::TOKEN
+
+    expect_user_to_be_signed_in
+  end
+
   scenario "tries with invalid password" do
     create_user "user@example.com", "password"
     sign_in_with "user@example.com", "wrong_password"

@@ -45,6 +45,11 @@ module Features
       reset_password_for user.email
       user.reload
     end
+
+    def verify_with(token)
+      fill_in "token", with: token
+      click_button "Verify"
+    end
   end
 end
 

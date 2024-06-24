@@ -1,0 +1,13 @@
+<h1>New OTP Verification</h1>
+
+<%= form_with url: otp_verification_path, local: true do |form| %>
+  <%= form.hidden_field :email, value: @user.email %>
+
+  <div>
+    <%= form.label :token %>
+    <%= form.text_field :token %>
+  </div>
+  <div>
+    <%= form.submit "Verify" %>
+  </div>
+<% end %>
